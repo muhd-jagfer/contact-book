@@ -15,6 +15,25 @@ The application also includes search and filtering. Users can view all contacts,
 
 The project uses a Python and Flask backend, a React frontend, and SQLite as the database.
 
+## Deploying to Vercel
+
+The repository is configured as a Vercel project with two services:
+
+- `frontend` builds the Vite app and receives all non-API paths.
+- `backend` runs the Flask app from `backend/app.py` and receives `/api/...` requests.
+
+The frontend calls the API through same-origin `/api` URLs, so no service binding or frontend API URL is required.
+
+Before deploying:
+
+1. Rotate the Neon database password if its connection string has been shared or exposed. Do not commit database credentials.
+2. Import this repository into Vercel with the repository root as the project root.
+3. Add `DATABASE_URL` to the Vercel environment variables using the rotated Neon pooled connection string. Enable it for Production and Preview deployments.
+4. Add `SECRET_KEY` as a separate Vercel environment variable with a newly generated, random secret. Do not reuse the development fallback.
+5. Deploy. Vercel installs the Python dependencies from `backend/requirements.txt` and builds the frontend from `frontend/package.json`.
+
+The backend requires `DATABASE_URL` and `SECRET_KEY` in Vercel Production and Preview environments. Local development can continue to use SQLite and the development session key when these variables are not set. Vercel's filesystem is ephemeral, so SQLite should not be used for deployed data.
+
 ## Features
 
 The main features of Contact Book are:
